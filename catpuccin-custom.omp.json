@@ -5,22 +5,32 @@
     "closer": "p:os",
     "pink": "#F5C2E7",
     "lavender": "#B4BEFE",
-    "blue": "#89B4FA"
+    "blue": "#89B4FA",
+    "main-bg": "#24283b",
+    "terminal-red": "#f7768e",
+    "pistachio-green": "#89e2ab",
+    "terminal-green": "#73daca",
+    "terminal-yellow": "#e0af68",
+    "terminal-blue": "#7aa2f7",
+    "celeste-blue": "#b4f9f8",
+    "light-sky-blue": "#7dcfff",
+    "terminal-white": "#c0caf5",
+    "white-blue": "#a9b1d6",
+    "blue-bell": "#9aa5ce",
+    "pastal-grey": "#cfc9c2",
+    "terminal-magenta": "#bb9af7",
+    "blue-black": "#565f89",
+    "terminal-black": "#414868",
+    "t-background": "p:main-bg"
   },
   "blocks": [
     {
       "alignment": "left",
       "segments": [
         {
-          "foreground": "p:os",
-          "style": "plain",
-          "template": "{{.Icon}} ",
-          "type": "os"
-        },
-        {
           "foreground": "p:blue",
           "style": "plain",
-          "template": "{{ .UserName }}@{{ .HostName }} ",
+          "template": "{{ .UserName }}@ ",
           "type": "session"
         },
         {
@@ -36,32 +46,113 @@
         },
         {
           "foreground": "p:lavender",
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}#89B4FA{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#EE79D1{{ end }}",
+            "{{ if gt .Ahead 0 }}#B388FF{{ end }}",
+            "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+          ],
           "properties": {
-            "branch_icon": "\ue725 ",
-            "cherry_pick_icon": "\ue29b ",
-            "commit_icon": "\uf417 ",
-            "fetch_status": false,
-            "fetch_upstream_icon": false,
-            "merge_icon": "\ue727 ",
-            "no_commits_icon": "\uf594 ",
-            "rebase_icon": "\ue728 ",
-            "revert_icon": "\uf0e2 ",
-            "tag_icon": "\uf412 "
+            "branch_max_length": 0,
+            "fetch_stash_count": true,
+            "fetch_status": true,
+            "fetch_upstream_icon": true
           },
-          "template": "{{ .HEAD }} ",
+          "template": "( <#ffffff>{{ .UpstreamIcon }}</>{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} <#ffffff>\uf044</> {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} <#ffffff>\uf046</> {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} <#ffffff>\uf692</> {{ .StashCount }}{{ end }} )",
           "style": "plain",
           "type": "git"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "right",
+      "overflow": "hide",
+      "segments": [
+        {
+          "type": "node",
+          "style": "plain",
+          "foreground": "p:pistachio-green",
+          "template": "\uf898 {{ .Major }}.{{ .Minor }} "
         },
         {
+          "type": "php",
           "style": "plain",
-          "foreground": "p:closer",
-          "template": "\uf105",
+          "foreground": "p:terminal-blue",
+          "template": "\ue73d {{ .Full }} "
+        },
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "p:terminal-yellow",
+          "template": "\uE235 {{ .Full }}"
+        },
+        {
+          "type": "julia",
+          "style": "plain",
+          "foreground": "p:terminal-magenta",
+          "template": "\uE624 {{ .Full }}"
+        },
+        {
+          "type": "ruby",
+          "style": "plain",
+          "foreground": "p:terminal-red",
+          "template": "\uE791 {{ .Full}}"
+        },
+        {
+          "type": "go",
+          "style": "plain",
+          "foreground": "p:light-sky-blue",
+          "template": "\uFCD1 {{ .Full}}"
+        },
+        {
+          "type": "npm",
+          "style": "plain",
+          "foreground": "p:terminal-red",
+          "properties": {
+            "fetch_version": true
+          },
+          "template": "\ue71e {{ .Major }}.{{ .Minor }} "
+        },
+        {
+          "type": "executiontime",
+          "foreground": "p:terminal-white",
+          "properties": {
+            "style": "austin",
+            "threshold": 0,
+            "always_enabled": true
+          },
+          "foreground_templates": ["{{ if gt .Code 0 }}#D51111{{ end }}"],
+          "style": "plain",
+          "template": "{{ .FormattedMs }}"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "p:pistachio-green",
+          "style": "plain",
+          "template": "\u279c",
           "type": "text"
         }
       ],
       "type": "prompt"
     }
   ],
+  "secondary_prompt": {
+    "background": "transparent",
+    "foreground": "p:terminal-blue",
+    "template": "\u279c "
+  },
+  "transient_prompt": {
+    "background": "transparent",
+    "foreground": "p:terminal-blue",
+    "template": "\u279c "
+  },
   "final_space": true,
   "version": 2
 }
